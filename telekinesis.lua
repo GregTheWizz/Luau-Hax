@@ -98,7 +98,7 @@ function toggleChairFlight(state)
 	if flightEnabled then
 		if hrp and humanoid then
 			-- Create a legitimate, unanchored VehicleSeat container
-			currentFlightChair = Instance.new("VehicleSeat")
+			currentFlightChair = Instance.new("Seat")
 			currentFlightChair.Size = Vector3.new(3, 1, 3)
 			currentFlightChair.Transparency = 0 -- Keep visible so you can see your seat!
 			currentFlightChair.BrickColor = BrickColor.new("Bright red")
