@@ -2,7 +2,7 @@ local Players = game:GetService("Players")
 local me = Players.LocalPlayer
 
 -- Load Rayfield [INDEX]
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu'))() [INDEX]
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))() [INDEX]
 
 local win = Rayfield:CreateWindow({
     Name = "Stat Editor",
