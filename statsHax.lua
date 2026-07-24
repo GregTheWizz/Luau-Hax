@@ -1,3 +1,4 @@
+-- Force cleanup of any old broken menus left in your game memory
 pcall(function()
     if Rayfield then Rayfield:Destroy() end
 end)
@@ -5,27 +6,26 @@ end)
 local Players = game:GetService("Players")
 local me = Players.LocalPlayer
 
--- Загружаем чистую библиотеку Rayfield [INDEX]
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))() [INDEX]
+-- Load the clean Rayfield UI environment
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu'))()
 
 local win = Rayfield:CreateWindow({
     Name = "Stat Editor",
     LoadingTitle = "Preparing Hax",
     LoadingSubtitle = "by GregTheWizz",
-    ConfigurationSaving = { Enabled = false } -- Отключаем сохранение, чтобы кэш не ломал слайдеры [INDEX]
+    ConfigurationSaving = { Enabled = false }
 })
 
 local StatsTab = win:CreateTab("Change Stats", 16140823621)
 
--- 1. Слайдер Скорости
+-- 1. Walkspeed Slider (Fixed syntax with Range table format)
 local SpeedSlider = StatsTab:CreateSlider({
     Name = "Walkspeed editor",
     Info = "Change Walkspeed",
+    Range = {10, 120}, -- FIXED: Rayfield syntax requires {Min, Max} array format
     Increment = 1,
-    Min = 10,
-    Max = 120, -- Немного увеличили максимум для тестов
     CurrentValue = 16,
-    Flag = "WalkspeedModifierFlag", -- Изменили имя флага для сброса сломанного кэша [INDEX]
+    Flag = "WalkspeedEngineFlag",
     Callback = function(val)
         local char = me.Character
         if char then
@@ -37,15 +37,14 @@ local SpeedSlider = StatsTab:CreateSlider({
     end,
 })
   
--- 2. Слайдер Прыжка
+-- 2. JumpPower Slider (Fixed syntax with Range table format)
 local JumpPowerSlider = StatsTab:CreateSlider({
     Name = "Jump editor",
     Info = "Change JumpPower",
+    Range = {10, 1000}, -- FIXED: Rayfield syntax requires {Min, Max} array format
     Increment = 1,
-    Min = 10,
-    Max = 1000,
     CurrentValue = 50,
-    Flag = "JumpPowerModifierFlag", -- Изменили имя флага для сброса сломанного кэша [INDEX]
+    Flag = "JumpPowerEngineFlag",
     Callback = function(val)
         local char = me.Character
         if char then
