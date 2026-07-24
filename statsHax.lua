@@ -13,7 +13,7 @@ local win = Rayfield:CreateWindow({
 
 local StatsTab = win:CreateTab("Change Stats", 16140823621)
 
--- 1. Walkspeed Slider (Fixed with Suffix)
+-- 1. Walkspeed Slider Configuration
 local SpeedSlider = StatsTab:CreateSlider({
     Name = "Walkspeed editor",
     Info = "Change Walkseed",
@@ -21,8 +21,7 @@ local SpeedSlider = StatsTab:CreateSlider({
     Max = 100,
     Increment = 1,
     CurrentValue = 16,
-    Suffix = "Speed", -- REQUIRED FIX: Rayfield needs this to align text properly [INDEX]
-    Flag = "SpeedFlag",
+    Flag = "WalkspeedModifierFlag",
     Callback = function(val)
         local char = me.Character
         if char then
@@ -34,7 +33,7 @@ local SpeedSlider = StatsTab:CreateSlider({
     end,
 })
   
--- 2. JumpPower Slider (Fixed with Suffix)
+-- 2. JumpPower Slider Configuration
 local JumpPowerSlider = StatsTab:CreateSlider({
     Name = "Jump editor",
     Info = "Change JumpPower",
@@ -42,8 +41,7 @@ local JumpPowerSlider = StatsTab:CreateSlider({
     Max = 1000,
     Increment = 1,
     CurrentValue = 50,
-    Suffix = "Power", -- REQUIRED FIX: Rayfield needs this to align text properly [INDEX]
-    Flag = "JumpFlag",
+    Flag = "JumpPowerModifierFlag",
     Callback = function(val)
         local char = me.Character
         if char then
