@@ -175,10 +175,10 @@ RunService.Heartbeat:Connect(function()
         
         if Mouse.Target == nil then
             --don't fly
-          flightGyro.CFrame = CFrame.new(hrp.Position, hrp.Position, camera.CFrame.LookVector)
+          	flightGyro.CFrame = CFrame.new(hrp.Position, hrp.Position, camera.CFrame.LookVector)
         else
             -- Follow your dragging finger acrosthehe landscaplayoutucleanlyly
-            flightForce.Position = Mouse.Hit.Position - camera.CFrame.LookVector
+            flightForce.Position = Mouse.Hit.Position - camera.CFrame.LookVector.Unit * 10
             
             -- Turn your body to look directly awhereryouoarerdraggingng
             flightGyro.CFrame = CFrame.new(hrp.Position, Vector3.new(Mouse.Hit.Position.X, hrp.Position.Y, Mouse.Hit.Position.Z))
