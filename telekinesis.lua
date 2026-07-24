@@ -26,7 +26,7 @@ local Window = Rayfield:CreateWindow({
 })
 
 local Tab = Window:CreateTab("Main Modifiers", 4483362458)
-local ChairUI = Window:CreateTab("Seat", 4483362458)
+local FlightTab = Window:CreateTab("Seat", 4483362458)
 
 -- ==================== [ TELEKINESIS CODE ] ====================
 -- Base tracking checks
@@ -87,74 +87,59 @@ Tab:CreateToggle({
 	end,
 })
 
--- ==================== [ SEAT FLIGHT CODE ] ====================
+-- ==================== [ MATRIX HOVER FLY ENGINE ] ====================
 
-function toggleChairFlight(state)
-	flightEnabled = state
-	local character = LocalPlayer.Character
-	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-	local hrp = character and character:FindFirstChild("HumanoidRootPart")
-
-	if flightEnabled then
-		if hrp and humanoid then
-			-- Create a legitimate, unanchored VehicleSeat container
-			currentFlightChair = Instance.new("Seat")
-			currentFlightChair.Size = Vector3.new(3, 1, 3)
-			currentFlightChair.Transparency = 0 -- Keep visible so you can see your seat!
-			currentFlightChair.BrickColor = BrickColor.new("Bright red")
-			currentFlightChair.CanCollide = true
-			currentFlightChair.Anchored = false
-			currentFlightChair.Massless = true
-			currentFlightChair.CFrame = hrp.CFrame * CFrame.new(0, -1.5, 0) -- Place under your feet
-			currentFlightChair.Parent = workspace
-
-			--[[ Force your avatar onto the seat smoothly
-			currentFlightChair:Sit(humanoid)]]
-
-			-- Add Hover Position Physics Engine
-			local flightForce = Instance.new("BodyPosition", currentFlightChair)
-			flightForce.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-			flightForce.P = 20000
-			flightForce.D = 1500
-			flightForce.Position = hrp.Position
-
-			-- Add Orientation Balance Stabilizer (Stops the chair from flipping upsidedown)
-			local gyroForce = Instance.new("BodyGyro", currentFlightChair)
-			gyroForce.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
-			gyroForce.P = 25000
-			gyroForce.D = 500
-			gyroForce.CFrame = hrp.CFrame
-		end
-	else
-		-- Clean up flight components safely when toggled off
-		if currentFlightChair then
-			currentFlightChair:Destroy()
-			currentFlightChair = nil
-		end
-		if humanoid then
-			humanoid.Jump = true -- Make character hop off safely
-		end
-	end
+function toggleMatrixFly(state)
+    flightEnabled = state
+    local character = LocalPlayer.Character
+    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+    local hrp = character and character:FindFirstChild("HumanoidRootPart")
+    
+    if flightEnabled then
+        if hrp and humanoid then
+            -- Create Hover Physics DIRECTLY inside your character core [INDEX]
+            flightForce = Instance.new("BodyPosition", hrp)
+            flightForce.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
+            flightForce.P = 15000
+            flightForce.D = 1000
+            flightForce.Position = hrp.Position
+            
+            -- Keep player straight and stable while flying
+            flightGyro = Instance.new("BodyGyro", hrp)
+            flightGyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
+            flightGyro.P = 20000
+            flightGyro.D = 500
+            flightGyro.CFrame = hrp.CFrame
+        end
+    else
+        -- Clean up body forces from your character completely
+        if flightForce then flightForce:Destroy() flightForce = nil end
+        if flightGyro then flightGyro:Destroy() flightGyro = nil end
+        if humanoid then
+            humanoid:ChangeState(Enum.HumanoidStateType.GettingUp) -- Reset animation [INDEX]
+        end
+    end
 end
 
-ChairUI:CreateToggle({
-	Name = "Spawn Seat",
-	CurrentValue = false,
-	Flag = "ChairFlightToggle",
-	Callback = function(Value)
-		toggleChairFlight(Value)
-	end,
+FlightTab:CreateToggle({
+   Name = "Activate Matrix Fly",
+   CurrentValue = false,
+   Flag = "MatrixFlyToggle",
+   Callback = function(Value)
+       toggleMatrixFly(Value)
+   end,
 })
 
--- ==================== [ MAIN EXECUTION ENGINE PIPELINE ] ====================
+-- ==================== [ MAIN EXECUTION LOOP ] ====================
 
 RunService.Heartbeat:Connect(function()
-	local character = LocalPlayer.Character
-	local hrp = character and character:FindFirstChild("HumanoidRootPart")
-	if not hrp then return end 
+    local character = LocalPlayer.Character
+    local hrp = character and character:FindFirstChild("HumanoidRootPart")
+    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+    if not hrp or not humanoid then return end 
 
-	-- Part 1: Telekinesis Tracking Systems
-	if enabled and not currentTarget then
+    -- Part 1: Telekinesis Tracking Engine
+	if telekinesisEnabled and not currentTarget then
 		currentTarget = getPart()
 		if currentTarget then
 			setOwner(currentTarget)
@@ -162,11 +147,11 @@ RunService.Heartbeat:Connect(function()
 			force.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
 			force.P = 40000
 			force.D = 2500
-			force.Position = Mouse.Hit.Position
+            force.Position = Mouse.Hit.Position
 		end
 	end
-
-	if enabled and currentTarget then
+	
+	if telekinesisEnabled and currentTarget then
 		local force = currentTarget:FindFirstChildOfClass("BodyPosition")
 		if force then
 			if Mouse.Target == nil then
@@ -174,28 +159,30 @@ RunService.Heartbeat:Connect(function()
 			else
 				force.Position = Mouse.Hit.Position
 			end
-			if currentHitbox then
-				currentHitbox.CFrame = currentTarget.CFrame
-			end
+            if currentHitbox then
+                currentHitbox.CFrame = currentTarget.CFrame
+            end
 		end
 	end
 
-	-- Part 2: Dynamic Chair Flight Handling Tracker
-	if flightEnabled and currentFlightChair then
-		local flightForce = currentFlightChair:FindFirstChildOfClass("BodyPosition")
-		local gyroForce = currentFlightChair:FindFirstChildOfClass("BodyGyro")
-
-		if flightForce and gyroForce then
-			if Mouse.Target == nil then
-				-- Do Nothing
-			else
-				-- Follow your finger tap or drag point cleanly through 3D space
-				flightForce.Position = Mouse.Hit.Position + Vector3.new(0, 3, 0) -- Hover slightly off the hit floor
-
-				-- Smoothly turn the chair to face the direction you are steering
-				local camera = workspace.CurrentCamera
-				gyroForce.CFrame = CFrame.new(currentFlightChair.Position, Vector3.new(Mouse.Hit.Position.X, currentFlightChair.Position.Y, Mouse.Hit.Position.Z))
-			end
-		end
-	end
+    -- Part 2: Matrix Flight Control System
+    if flightEnabled and flightForce and flightGyro then
+        -- TRICK THE ENGINE: Forcefully lock your local character animation state into Seated [INDEX, INDEX]
+        -- This forces your character to stay in a sitting position while flying around!
+        humanoid:ChangeState(Enum.HumanoidStateType.Seated) 
+        
+        local camera = workspace.CurrentCamera
+        
+        if Mouse.Target == nil then
+            -- Sky Protection: Travel smoothly 35 studs in front of your camera view angle
+            flightForce.Position = camera.CFrame.Position + (camera.CFrame.LookVector * 35)
+            flightGyro.CFrame = CFrame.new(hrp.Position, hrp.Position + camera.CFrame.LookVector)
+        else
+            -- Follow your dragging finger across the landscape layout cleanly
+            flightForce.Position = Mouse.Hit.Position + Vector3.new(0, 4, 0) -- Float 4 studs above the floor
+            
+            -- Turn your body to look directly at where you are dragging
+            flightGyro.CFrame = CFrame.new(hrp.Position, Vector3.new(Mouse.Hit.Position.X, hrp.Position.Y, Mouse.Hit.Position.Z))
+        end
+    end
 end)
