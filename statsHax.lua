@@ -47,5 +47,5 @@ local JumpPowerSlider = StatsTab:CreateSlider({
           hum.UseJumpPower = true
           hum.JumpPower = val
       end
-  
+        end,
         })
