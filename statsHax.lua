@@ -13,7 +13,7 @@ local win = Rayfield:CreateWindow({
 
 local StatsTab = win:CreateTab("Change Stats", 16140823621)
 
-local SpeedSlider = Tab:CreateSlider({
+local SpeedSlider = StatsTab:CreateSlider({
     Name = "Walkspeed editor",
     Info = "Change Walkseed",
     Increment = 0.1,
@@ -31,7 +31,7 @@ local SpeedSlider = Tab:CreateSlider({
     end,
 )
   
-local JumpPowerSlider = Tab:CreateSlider({
+local JumpPowerSlider = StatsTab:CreateSlider({
     Name = "Jump editor",
     Info = "Change JumpPower",
     Increment = 0.1,
