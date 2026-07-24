@@ -29,7 +29,7 @@ local SpeedSlider = StatsTab:CreateSlider({
           hum.WalkSpeed = val
       end
     end,
-    })
+})
   
 local JumpPowerSlider = StatsTab:CreateSlider({
     Name = "Jump editor",
@@ -47,5 +47,5 @@ local JumpPowerSlider = StatsTab:CreateSlider({
           hum.UseJumpPower = true
           hum.JumpPower = val
       end
-        end,
-        })
+    end,
+})
