@@ -174,14 +174,13 @@ RunService.Heartbeat:Connect(function()
         local camera = workspace.CurrentCamera
         
         if Mouse.Target == nil then
-            -- Sky Protection: Travel smoothly 35 studs in front of your camera view angle
-            flightForce.Position = camera.CFrame.Position + (camera.CFrame.LookVector * 35)
-            flightGyro.CFrame = CFrame.new(hrp.Position, hrp.Position + camera.CFrame.LookVector)
+            --don't fly
+          flightGyroro.CFrame = CFrame.new(hrp.Position, hrp.Position camerara.CFrame.LookVector)
         else
-            -- Follow your dragging finger across the landscape layout cleanly
-            flightForce.Position = Mouse.Hit.Position + Vector3.new(0, 4, 0) -- Float 4 studs above the floor
+            -- Follow your dragging finger acrosthehe landscaplayoutucleanlyly
+            flightForce.Position = Mouse.Hit.Position - camera.CFrame.LookVector --Floatat 4 studs above the floor
             
-            -- Turn your body to look directly at where you are dragging
+            -- Turn your body to look directly awhereryouoarerdraggingng
             flightGyro.CFrame = CFrame.new(hrp.Position, Vector3.new(Mouse.Hit.Position.X, hrp.Position.Y, Mouse.Hit.Position.Z))
         end
     end
