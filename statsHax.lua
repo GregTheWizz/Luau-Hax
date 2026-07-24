@@ -1,13 +1,8 @@
--- Force cleanup of any old broken menus left in your game memory
-pcall(function()
-    if Rayfield then Rayfield:Destroy() end
-end)
-
 local Players = game:GetService("Players")
 local me = Players.LocalPlayer
 
--- Load the clean Rayfield UI environment
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu'))()
+-- Load Rayfield [INDEX]
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu'))() [INDEX]
 
 local win = Rayfield:CreateWindow({
     Name = "Stat Editor",
@@ -18,14 +13,16 @@ local win = Rayfield:CreateWindow({
 
 local StatsTab = win:CreateTab("Change Stats", 16140823621)
 
--- 1. Walkspeed Slider (Fixed syntax with Range table format)
+-- 1. Walkspeed Slider (Fixed with Suffix)
 local SpeedSlider = StatsTab:CreateSlider({
     Name = "Walkspeed editor",
-    Info = "Change Walkspeed",
-    Range = {10, 120}, -- FIXED: Rayfield syntax requires {Min, Max} array format
+    Info = "Change Walkseed",
+    Min = 10,
+    Max = 100,
     Increment = 1,
     CurrentValue = 16,
-    Flag = "WalkspeedEngineFlag",
+    Suffix = "Speed", -- REQUIRED FIX: Rayfield needs this to align text properly [INDEX]
+    Flag = "SpeedFlag",
     Callback = function(val)
         local char = me.Character
         if char then
@@ -37,14 +34,16 @@ local SpeedSlider = StatsTab:CreateSlider({
     end,
 })
   
--- 2. JumpPower Slider (Fixed syntax with Range table format)
+-- 2. JumpPower Slider (Fixed with Suffix)
 local JumpPowerSlider = StatsTab:CreateSlider({
     Name = "Jump editor",
     Info = "Change JumpPower",
-    Range = {10, 1000}, -- FIXED: Rayfield syntax requires {Min, Max} array format
+    Min = 10,
+    Max = 1000,
     Increment = 1,
     CurrentValue = 50,
-    Flag = "JumpPowerEngineFlag",
+    Suffix = "Power", -- REQUIRED FIX: Rayfield needs this to align text properly [INDEX]
+    Flag = "JumpFlag",
     Callback = function(val)
         local char = me.Character
         if char then
