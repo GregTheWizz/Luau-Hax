@@ -1,8 +1,8 @@
 local Players = game:GetService("Players")
 local me = Players.LocalPlayer
 
--- Load Rayfield [INDEX]
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))() [INDEX]
+-- THE CORRECT COMPLETE LINK: Erase the old line and use this exact URL path
+local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/SiriusSoftwareLtd/Rayfield/main/source.lua"))()
 
 local win = Rayfield:CreateWindow({
     Name = "Stat Editor",
@@ -16,7 +16,7 @@ local StatsTab = win:CreateTab("Change Stats", 16140823621)
 -- 1. Walkspeed Slider Configuration
 local SpeedSlider = StatsTab:CreateSlider({
     Name = "Walkspeed editor",
-    Info = "Change Walkseed",
+    Info = "Change Walkspeed",
     Min = 10,
     Max = 100,
     Increment = 1,
