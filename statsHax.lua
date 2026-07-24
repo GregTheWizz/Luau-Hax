@@ -19,7 +19,7 @@ local SpeedSlider = StatsTab:CreateSlider({
     Increment = 0.1,
     Min = 10,
     Max = 100,
-    Current = 16,
+    CurrentValue = 16,
     Flag = "SpeedFlag",
     Callback = function(val)
 
@@ -29,7 +29,7 @@ local SpeedSlider = StatsTab:CreateSlider({
           hum.WalkSpeed = val
       end
     end,
-)
+    })
   
 local JumpPowerSlider = StatsTab:CreateSlider({
     Name = "Jump editor",
@@ -37,8 +37,8 @@ local JumpPowerSlider = StatsTab:CreateSlider({
     Increment = 0.1,
     Min = 10,
     Max = 1000,
-    Current = 50,
-    Flag = "SpeedFlag",
+    CurrentValue = 50,
+    Flag = "JumpFlag",
     Callback = function(val)
 
       local char = me.Character
@@ -48,4 +48,4 @@ local JumpPowerSlider = StatsTab:CreateSlider({
           hum.JumpPower = val
       end
   
-)
+        })
