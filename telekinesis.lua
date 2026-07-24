@@ -108,8 +108,8 @@ function toggleChairFlight(state)
 			currentFlightChair.CFrame = hrp.CFrame * CFrame.new(0, -1.5, 0) -- Place under your feet
 			currentFlightChair.Parent = workspace
 
-			-- Force your avatar onto the seat smoothly
-			currentFlightChair:Sit(humanoid)
+			--[[ Force your avatar onto the seat smoothly
+			currentFlightChair:Sit(humanoid)]]
 
 			-- Add Hover Position Physics Engine
 			local flightForce = Instance.new("BodyPosition", currentFlightChair)
